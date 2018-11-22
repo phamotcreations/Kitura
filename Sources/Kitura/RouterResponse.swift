@@ -440,7 +440,11 @@ public class RouterResponse {
             Log.warning("RouterResponse send(str:) invoked after end() for \(self.request.urlURL)")
             return self
         }
-        return send(str.data(using: .utf8))
+        guard let data = str.data(using: .utf8) else {
+            Log.error("String '\(str)' could not be encoded to UTF8")
+            return self
+        }
+        return send(data: data)
 //        let utf8Length = str.lengthOfBytes(using: .utf8)
 //        let bufferLength = utf8Length + 1  // Add room for the NULL terminator
 //        var utf8: [CChar] = [CChar](repeating: 0, count: bufferLength)
